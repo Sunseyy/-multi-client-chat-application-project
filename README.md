@@ -1,5 +1,4 @@
-def generate_readme():
-    readme_text = """
+
 # Multi-Client Chat Application
 
 This project is a multi-client chat application developed using socket programming and multithreading in Python. It demonstrates network programming, concurrent programming, and basic security concepts by enabling multiple clients to communicate with each other via a server. Clients can join private chat rooms (channels), send messages to all connected clients, and engage in private chats.
@@ -146,5 +145,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
         file.write(readme_text)
     print("README.md has been generated!")
 
-# Call the function to generate the README file
-generate_readme()
+
