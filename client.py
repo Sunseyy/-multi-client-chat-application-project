@@ -28,9 +28,9 @@ def receive():
             # Receive Message From Server
             # If 'NICK' Send Nickname
             message = client.recv(1024).decode('ascii')
-            if message == 'NICK':
+            if message == 'username':
                 client.send(nickname.encode('ascii'))
-            if message =='PASS':
+            if message =='password':
                 
                 client.send(password.encode('ascii'))
             elif message == 'DisC':
