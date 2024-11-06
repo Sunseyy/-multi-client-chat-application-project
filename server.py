@@ -16,7 +16,9 @@ server.listen()
 # Lists For Clients and Their Nicknames
 clients = []
 nicknames = []
+passwords=[]
 status=[]
+
 Channels={}
 channel_passwords={}
 max_users={}
@@ -73,7 +75,7 @@ def handle(client):
             message_decode=message.decode('utf-8') 
             if "/help" in message_decode:  # Check if /help is in the message
                 
-                client.send(b'/help - Show this help message\n/listUsers - List all users\n/join [channel] - Join a channel\n/leave [channel] - Leave a channel\n/nickname [new_nickname] - Change your nickname\n/disconnect - Disconnect from the server\n /join <channell> \n /create <channel> \n /prv <destination> <messg> ')
+                client.send(b'/help - Show this help message\n/listUsers - List all users\n/join [channel] - Join a channel\n/leave [channel] - Leave a channel\n/nickname [new_nickname] - Change your nickname\n/disconnect - Disconnect from the server\n /join <channell> \n /create <channel> \n /prv <destination> <messg> \n /nickname <new Nickname> ')
             elif "/listUsers" in message_decode:
                 
                 handle_list(nicknames,status,client)
@@ -291,15 +293,24 @@ def receive():
             # Request And Store Nickname
             client.send('NICK'.encode('ascii'))
             nickname = client.recv(1024).decode('ascii')
+
+            client.send('PASS'.encode('ascii'))
+            passwordC=client.recv(1024).decode('ascii')
             
 
             # Check if the nickname is already in use
             if nickname in nicknames and status[nicknames.index(nickname)] == 'Offline':
+               
+                
                 index = nicknames.index(nickname)
-                print('first !')
-                clients[index] = client
-                status[index] = 'Online'  # Set status to online
-                client.send(f"Welcome back, {nickname}!".encode('ascii'))
+                if passwordC == passwords[index]:
+                    print('first !')
+                    clients[index] = client
+                    status[index] = 'Online'  # Set status to online
+                    client.send(f"Welcome back, {nickname}!".encode('ascii'))
+                else:
+                    print('password incorrect')
+                    client.send("DisC".encode('ascii'))
 
                     
             elif nickname in nicknames  and status[nicknames.index(nickname)] == 'Online':
@@ -308,7 +319,10 @@ def receive():
                
                     
             if nickname not in nicknames:
+                print('im here')
                 nicknames.append(nickname)
+                passwords.append(passwordC)
+                
                 status.append('Online')
                 clients.append(client)
 

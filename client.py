@@ -8,6 +8,9 @@ def validate_username(nickname):
 nickname = input("Choose your nickname: ")
 while not validate_username(nickname):
     nickname = input("Choose another username this one is not valid !: ")
+
+password = input("Choose your password: ")
+
 # Connecting To Server
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(('127.0.0.1', 55555))
@@ -27,6 +30,9 @@ def receive():
             message = client.recv(1024).decode('ascii')
             if message == 'NICK':
                 client.send(nickname.encode('ascii'))
+            if message =='PASS':
+                
+                client.send(password.encode('ascii'))
             elif message == 'DisC':
                 opt = False
                 print("You are now disconnected.")
@@ -38,7 +44,7 @@ def receive():
                 nickname = input("Choose a new username: ")
                 print ('this is the nickname ',nickname)
                 client.send(nickname.encode('ascii')) # Send the new nickname to the server
-                
+
             elif "Your nickname has been changed to" in message:
                 nickname = message.split()[-1]  # Extract the new nickname
                 print(f"Your nickname is now: {nickname}")
