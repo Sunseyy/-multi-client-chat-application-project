@@ -38,7 +38,11 @@ def receive():
                 nickname = input("Choose a new username: ")
                 print ('this is the nickname ',nickname)
                 client.send(nickname.encode('ascii')) # Send the new nickname to the server
-
+                
+            elif "Your nickname has been changed to" in message:
+                nickname = message.split()[-1]  # Extract the new nickname
+                print(f"Your nickname is now: {nickname}")
+        # Optionally, update the client's display here
             else:
                 print(message)
         except socket.error:

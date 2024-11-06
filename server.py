@@ -187,7 +187,9 @@ def handle(client):
                         # Set current_channel to None to indicate that the user is no longer in a channel
                         current_channel = None
                         
-                       
+            elif "/nickname" in message_decode:
+                change_nickname(client, message_decode,current_channel)
+ 
             elif "/prv" in message_decode:
                 _,prv, target_nickname, *msg = message.split()
                 
@@ -228,6 +230,33 @@ def handle_disconnection(currentNickname, status):
         if nicknames[i] == currentNickname:
            break  # Mark the client as offline
     return i
+
+def change_nickname(client, message_decode,current_channel):
+    # Split the message into command and nickname
+    parts = message_decode.split()
+    
+    if len(parts) < 2:
+        # If the message doesn't contain a new nickname
+        client.send("Usage: /nickname <new_nickname>".encode('ascii'))
+        return
+    
+    new_nickname = parts[2]  # Get the new nickname from the message
+    
+    
+    
+    # Get the current nickname index
+    current_index = clients.index(client)
+    
+    # Change the nickname
+    old_nickname = nicknames[current_index]
+    nicknames[current_index] = new_nickname
+    
+    # Notify the client about the change
+    client.send(f"Your nickname has been changed to {new_nickname}".encode('ascii'))
+    
+    # Optionally, broadcast to other clients in the same channel about the nickname change
+    # Broadcast can be done here if you want to notify others about the nickname change
+    broadcast(f"{old_nickname} is now known as {new_nickname}.".encode('ascii'), current_channel)
 
 
 def shutdown_server():
