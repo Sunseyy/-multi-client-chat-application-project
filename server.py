@@ -66,29 +66,29 @@ def display_channels(channels, client):
 
 
 # Handling Messages From Clients
+# Handling Messages From Clients
 def handle(client):
-    current_channel = None
+    current_channel=None
     try:
         while True:
             message = client.recv(1024)  # Decode the message to a string
-            message_decode = message.decode('utf-8')
-
+            
+            message_decode=message.decode('utf-8') 
             if "/help" in message_decode:  # Check if /help is in the message
+                
                 client.send(b'\033[1;34m/help - Show this help message\n/listUsers - List all users\n/join [channel] - Join a channel\n/quit [channel] - Leave a channel\n/nickname [new_nickname] - Change your nickname\n/disconnect - Disconnect from the server\n /join <channell> \n /create <channel> \n /prv <destination> <messg> \n\033[0m')
 
             elif "/listUsers" in message_decode:
-                handle_list(nicknames, status, client)
-
-            elif "/ListChannels" in message_decode:
-                display_channels(Channels, client)
-
-            elif "/disconnect" in message_decode:
-                current_nickname = message.split()[1]
-                i = handle_disconnection(current_nickname, status)
-                status[i] = 'Offline'
-                client.send('\033[1;31mDisconnected from the server.\033[0m'.encode('ascii'))  # Red color for disconnect
-                client.send('DisC'.encode('ascii'))
                 
+                handle_list(nicknames,status,client)
+            elif "/ListChannels" in message_decode:
+                display_channels(Channels,client)
+            elif "/disconnect" in message_decode:
+                current_nickname= message.split()[1]
+                i =handle_disconnection(current_nickname,status)
+                status[i]='Offline'
+                client.send('DisC'.encode('ascii'))
+                print(clients)
 
             elif "/join" in message_decode:
                 parts = message_decode.split()
@@ -110,7 +110,7 @@ def handle(client):
                             # Wait for the user to send the password
                             password_message = client.recv(1024).decode('utf-8')
                             entered_password = password_message.split(':', 1)[1].strip()  # Extract and trim the password
-                            
+                            print(entered_password)
                             if entered_password == channel_passwords[channel_name]:
                                 Channels[channel_name].append(client)
                                 current_channel = channel_name
@@ -216,7 +216,6 @@ def handle(client):
     except (OSError, ConnectionAbortedError) as e:
         # Catch errors when trying to communicate with a disconnected client
         pass
-
 def handle_list(nicknames,status,client):
     for i in range(len(nicknames)):
         client.send(f'{nicknames[i]} : {status[i]}\n'.encode('utf-8'))

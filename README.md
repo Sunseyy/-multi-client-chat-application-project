@@ -117,6 +117,7 @@ multi-client-chat-app/ │ ├── server.py # Main server script ├── cl
 
 5. **Private Messaging**: Users can send private messages to each other. The server ensures the message is delivered to the intended recipient.
 
+![Alt Text](./multiClientCHAT.gif)
 ## Security Features
 
 - **Password Protection for Channels**: Channels can be password-protected, and users are prompted to enter a password to join.
